@@ -1,0 +1,22 @@
+{
+  "name": "internet-arcade-bot",
+  "version": "1.0.0",
+  "description": "A chat bot for the Internet Arcade on Archive.org.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matheu Plouffe",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "dialogflow": "^0.6.0",
+    "express": "^4.16.3",
+    "restify": "^7.2.1"
+  },
+  "devDependencies": {
+    "expect": "^23.4.0",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.18.3"
+  }
+}
