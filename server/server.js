@@ -1,30 +1,45 @@
 'use strict';
 
-const restify = require('restify');
+const dialogflow = require('dialogflow');
 
 const PORT = process.env.PORT || 3000;
+const projectId = process.env.DF_PROJECT_ID || 'dos-glob-bot-210819';
+const sessionId = 'session_id'
 
-const server = restify.createServer({
-    name: 'InternetArcadeChatBot'
-});
-
-server.use(restify.plugins.bodyParser());
-
-
-server.post('/dialogflow_webhook', (req, res, next) => {
-    let {
-        status,
-        result
-    } = req.body;
-
-    console.log(req);
-    console.log('Status: ', status);
-    console.log('Result: ', result);
-
-    res.send();
-    return next();
-});
-
-server.listen(PORT, () => {
-    console.log('Server is listening at port ', PORT);
-});
+const query = 'hello';
+const languageCode = 'en-US';
+ 
+// Instantiate a DialogFlow client.
+const sessionClient = new dialogflow.SessionsClient();
+ 
+// Define session path
+const sessionPath = sessionClient.sessionPath(projectId, sessionId);
+ 
+// The text query request.
+const request = {
+  session: sessionPath,
+  queryInput: {
+    text: {
+      text: query,
+      languageCode: languageCode,
+    },
+  },
+};
+ 
+// Send request and log result
+sessionClient
+  .detectIntent(request)
+  .then(responses => {
+    console.log('Detected intent');
+    const result = responses[0].queryResult;
+    console.log(`  Query: ${result.queryText}`);
+    console.log(`  Response: ${result.fulfillmentText}`);
+    if (result.intent) {
+      console.log(`  Intent: ${result.intent.displayName}`);
+    } else {
+      console.log(`  No intent matched.`);
+    }
+  })
+  .catch(err => {
+    console.error('ERROR:', err);
+  });
